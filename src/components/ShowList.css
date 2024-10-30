@@ -1,0 +1,27 @@
+.show-list {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .show-list-item {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 10px 0;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .show-list-item:hover {
+    background-color: #f00707;
+  }
+  
+  .show-image {
+    width: 100px;
+  }
+  
+  .genres {
+    font-size: 0.9em;
+    color: #555;
+  }
+  
