@@ -9,8 +9,10 @@
     cursor: pointer;
     width: 100px;
     text-align: center;
-    transition: background-color 0.2s;
+    transition: background-color 0.2s, transform 0.2s;
     margin: 5px;
+    background-color: #ffffff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   }
   
   .season.selected {
@@ -25,11 +27,12 @@
     text-align: center;
     cursor: pointer;
     background-color: #f9f9f9;
-    transition: background-color 0.2s;
+    transition: background-color 0.2s, transform 0.2s;
     margin: 5px;
   }
   
   .episode:hover {
     background-color: #d9d9d9;
+    transform: translateY(-2px);
   }
   

@@ -1,52 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import './ShowList.css'; // Import the CSS file
-import EpisodePlayer from './EpisodePlayer';
-import SeasonEpisodes from './SeasonEpisodes';
-
-interface Show {
-  id: number;
-  title: string;
-  description: string;
-  image: string;
-  genreIds: number[];
-  lastUpdated: string;
-  seasons?: Season[]; // Add seasons property here
-}
-
-interface Season {
-  id: number;
-  title: string;
-  episodes: Episode[];
-}
-
-interface Episode {
-  id: number;
-  title: string;
-  description: string;
-  audioUrl: string; // Ensure you have this property
-}
-
-// Define genre mapping
-const genreMapping: { [key: number]: string } = {
-  1: "Comedy",
-  2: "Drama",
-  3: "Thriller", // Add other genre mappings here
-  4: "Documentary",
-  // Add more genres as needed
-};
-
-const formatDate = (dateString: string) => {
-  const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' };
-  return new Date(dateString).toLocaleDateString(undefined, options);
-};
+import Modal from './Modal';
+import './ShowList.css';
+import { Show } from '../types';
 
 const ShowList: React.FC = () => {
   const [shows, setShows] = useState<Show[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedShow, setSelectedShow] = useState<Show | null>(null);
-
-  const placeholderAudioUrl = 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3';
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [seasonCounts, setSeasonCounts] = useState<{ [key: number]: number }>({});
 
   useEffect(() => {
     const fetchShows = async () => {
@@ -54,11 +17,21 @@ const ShowList: React.FC = () => {
         const response = await fetch('https://podcast-api.netlify.app');
         if (!response.ok) throw new Error("Network response was not ok");
         const data: Show[] = await response.json();
-        console.log(data); // Log the data to check the structure
+
+        // Sort shows alphabetically by title before setting state
         const sortedData = data.sort((a, b) => a.title.localeCompare(b.title));
         setShows(sortedData);
+
+        // Fetch season counts for each show
+        await Promise.all(
+          sortedData.map(async (show) => {
+            const showResponse = await fetch(`https://podcast-api.netlify.app/id/${show.id}`);
+            const showDetails = await showResponse.json();
+            setSeasonCounts((prev) => ({ ...prev, [show.id]: showDetails.seasons.length }));
+          })
+        );
       } catch (error) {
-        console.error('Error fetching shows:', error);
+        console.error("Error fetching shows:", error);
         setError("Failed to load shows.");
       } finally {
         setLoading(false);
@@ -68,14 +41,14 @@ const ShowList: React.FC = () => {
     fetchShows();
   }, []);
 
-  const fetchShowDetails = async (id: number) => {
-    try {
-      const response = await fetch(`https://podcast-api.netlify.app/id/${id}`);
-      const show = await response.json();
-      setSelectedShow(show); // Set the show with its seasons and episodes
-    } catch (error) {
-      console.error("Error fetching show details:", error);
-    }
+  const handleShowSelect = (show: Show) => {
+    setSelectedShow(show);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedShow(null);
   };
 
   if (loading) return <div>Loading...</div>;
@@ -86,32 +59,26 @@ const ShowList: React.FC = () => {
       <h1>Available Shows</h1>
       <ul className="show-list">
         {shows.map((show) => (
-          <li 
-            key={show.id} 
-            className="show-list-item" 
-            onClick={() => fetchShowDetails(show.id)} // Fetch show details on click
-          >
-            <h2>{show.title}</h2>
-            <p>{show.description}</p>
+          <li key={show.id} className="show-list-item">
             <img src={show.image} alt={show.title} className="show-image" />
-            <p className="genres">
-              Genres: {show.genreIds && show.genreIds.length > 0 
-                ? show.genreIds.map(id => genreMapping[id] || "Unknown genre").join(", ") 
-                : "No genres available"}
-            </p>
-            <p className="last-updated">
-              Last Updated: {formatDate(show.lastUpdated)} {/* Add this line */}
-            </p>
-            <EpisodePlayer 
-              episodeTitle={`${show.title} - Sample Episode`}
-              placeholderAudioUrl={placeholderAudioUrl} 
-            />
+            <h2>{show.title}</h2>
+            <p className="show-description">{show.description}</p>
+            <p>Seasons: {seasonCounts[show.id] ?? 0}</p>
+            <button className="season-button" onClick={() => handleShowSelect(show)}>
+              View Seasons
+            </button>
           </li>
         ))}
       </ul>
-  
-      {/* Render SeasonEpisodes based on selectedShow */}
-      {selectedShow && <SeasonEpisodes show={selectedShow} />}
+
+      {/* Modal Component */}
+      {isModalOpen && selectedShow && (
+        <Modal
+          show={isModalOpen}
+          onClose={handleCloseModal}
+          showData={selectedShow}
+        />
+      )}
     </div>
   );
 };

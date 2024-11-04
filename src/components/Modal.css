@@ -1,0 +1,91 @@
+/* src/components/Modal.css */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.85); /* Dark overlay for focus */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Ensure modal is on top */
+}
+
+.modal-content {
+  background: #ffffff; /* White background for content */
+  border-radius: 10px; /* Rounded corners */
+  width: 90%; /* Full width for smaller screens */
+  max-width: 800px; /* Max width for larger screens */
+  height: auto; /* Auto height to fit content */
+  max-height: 90vh; /* Max height to prevent overflow */
+  overflow-y: auto; /* Scroll if content overflows */
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2); /* Soft shadow for depth */
+  display: flex;
+  flex-direction: column; /* Stack children vertically */
+  position: relative; /* Position relative for close button */
+  padding: 20px; /* Padding inside the modal */
+}
+
+.close-button {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: transparent;
+  border: none;
+  font-size: 1.5em;
+  cursor: pointer;
+  color: #333; /* Dark color for close button */
+  transition: color 0.3s; /* Smooth color transition */
+}
+
+.close-button:hover {
+  color: #e74c3c; /* Change color on hover */
+}
+
+.modal-title {
+  font-size: 2em; /* Title font size */
+  margin-bottom: 10px; /* Space below title */
+}
+
+.modal-image {
+  width: 100%; /* Full width for the image */
+  height: auto; /* Maintain aspect ratio */
+  border-radius: 10px; /* Rounded corners */
+  margin-bottom: 20px; /* Space below image */
+}
+
+.modal-description {
+  font-size: 1.1em; /* Standard font size for description */
+  color: #555; /* Gray color for description */
+  margin-bottom: 20px; /* Space below description */
+  text-align: justify; /* Justify text for better readability */
+}
+
+.modal-genre {
+  font-size: 1em; /* Font size for genres */
+  color: #777; /* Gray color for genres */
+  margin-bottom: 20px; /* Space below genres */
+}
+
+.season-list {
+  margin: 10px 0; /* Space between seasons */
+}
+
+.season-item {
+  margin-bottom: 15px; /* Space below each season */
+  padding: 10px; /* Padding for each season item */
+  background: #f9f9f9; /* Light background for season items */
+  border-radius: 5px; /* Rounded corners */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.episode-list {
+  margin-top: 10px; /* Space above episode list */
+}
+
+.episode-item {
+  margin-bottom: 10px; /* Space below each episode */
+}
+
+
