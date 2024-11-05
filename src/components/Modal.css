@@ -88,4 +88,16 @@
   margin-bottom: 10px; /* Space below each episode */
 }
 
+.modal-audio-player {
+  width: 100%; /* Full width to match the image */
+  margin-top: 15px; /* Spacing above */
+  margin-bottom: 20px; /* Spacing below */
+}
 
+.season-dropdown {
+  margin: 10px 0;
+  padding: 8px;
+  font-size: 1em;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}

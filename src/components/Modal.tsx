@@ -21,11 +21,10 @@ interface ModalProps {
     image: string;
     description: string;
     genres: number[];
-    seasons: Season[];
+    seasons: Season[]; // Ensure seasons are included
   };
 }
 
-// Genre ID-to-title mapping
 const GENRE_TITLES: { [key: number]: string } = {
   1: "Personal Growth",
   2: "Investigative Journalism",
@@ -43,15 +42,12 @@ const Modal: React.FC<ModalProps> = ({ show, onClose, showData }) => {
 
   if (!show) return null;
 
-  // Map genre IDs to genre titles
   const genreTitles = showData.genres.map((id) => GENRE_TITLES[id] || "Unknown Genre");
 
-  // Function to handle season selection
-  const handleSeasonSelect = (seasonId: number) => {
-    setSelectedSeasonId(seasonId === selectedSeasonId ? null : seasonId); // Toggle selection
+  const handleSeasonChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedSeasonId(Number(event.target.value));
   };
 
-  // Get the selected season's episodes
   const selectedSeason = selectedSeasonId
     ? showData.seasons.find(season => season.id === selectedSeasonId)
     : null;
@@ -62,31 +58,20 @@ const Modal: React.FC<ModalProps> = ({ show, onClose, showData }) => {
         <button className="close-button" onClick={onClose} aria-label="Close modal">✖</button>
         <h2 className="modal-title">{showData.title}</h2>
         <img src={showData.image} alt={showData.title} className="modal-image" />
+
         <p className="modal-description">{showData.description}</p>
         <p className="modal-genre">Genre: {genreTitles.join(", ")}</p>
-        
-        <h3>Seasons</h3>
-        <div className="season-list">
-          {showData.seasons.length > 0 ? (
-            showData.seasons.map((season) => (
-              <div key={season.id} className="season-item">
-                <h4>
-                  <button 
-                    onClick={() => handleSeasonSelect(season.id)} 
-                    className={`season-toggle ${selectedSeasonId === season.id ? 'active' : ''}`}
-                  >
-                    {season.title}
-                  </button>
-                </h4>
-                <p>{season.episodes.length} Episodes</p>
-              </div>
-            ))
-          ) : (
-            <p>No seasons available.</p>
-          )}
-        </div>
 
-        {/* Display selected season's episodes */}
+        <h3>Seasons</h3>
+        <select onChange={handleSeasonChange} value={selectedSeasonId || ''} className="season-dropdown">
+          <option value="" disabled>Select a season</option>
+          {showData.seasons.map((season) => (
+            <option key={season.id} value={season.id}>
+              {season.title}
+            </option>
+          ))}
+        </select>
+
         {selectedSeason && (
           <div className="episode-list">
             <h4>Episodes for {selectedSeason.title}</h4>

@@ -28,6 +28,8 @@ const ShowList: React.FC = () => {
             const showResponse = await fetch(`https://podcast-api.netlify.app/id/${show.id}`);
             const showDetails = await showResponse.json();
             setSeasonCounts((prev) => ({ ...prev, [show.id]: showDetails.seasons.length }));
+            // Attach the seasons directly to the show object
+            show.seasons = showDetails.seasons; // Adding seasons to the show object
           })
         );
       } catch (error) {
@@ -76,7 +78,7 @@ const ShowList: React.FC = () => {
         <Modal
           show={isModalOpen}
           onClose={handleCloseModal}
-          showData={selectedShow}
+          showData={selectedShow} // Pass the selected show data
         />
       )}
     </div>
