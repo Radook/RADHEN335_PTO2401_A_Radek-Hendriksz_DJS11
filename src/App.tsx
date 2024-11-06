@@ -5,7 +5,7 @@ import Showlist from './components/Showlist'; // adjusted path to match casing
 const App: React.FC = () => {
   return (
     <div>
-      <h1>Podcast Shows AMONGUS</h1>
+      <h1>Podcast Shows yes</h1>
       <Showlist />
     </div>
   );
