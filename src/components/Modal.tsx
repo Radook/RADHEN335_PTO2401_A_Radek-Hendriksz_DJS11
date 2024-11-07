@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-
+import './modal.css'; // Importing the CSS file
 // Genre ID to title mapping
 const GENRE_TITLES: { [key: number]: string } = {
   1: "Personal Growth",
@@ -19,17 +19,34 @@ interface Podcast {
   description: string;
   image: string;
   genres: number[];
-  seasons: { season: number; title?: string; image?: string; episodes?: any[] }[];
+  updated: string;
+  seasons: number[];
   episodes?: { season: number; title: string; episodeNumber: number; audioUrl?: string }[];
 }
 
 interface ModalProps {
   podcast: Podcast;
   closeModal: () => void;
+  toggleFavoriteEpisode: (uniqueId: string) => void;
+  episodeFavorites: string[];
+}
+
+// Define types for Season and Episode
+interface Episode {
+  season: number;
+  title: string;
+  episodeNumber: number;
+  audioUrl?: string;
+}
+
+interface Season {
+  season: number;
+  title?: string;
+  episodes: Episode[];
 }
 
 // Seasons component
-const Seasons: React.FC<{ seasons: any[]; onSeasonChange: (season: number | null) => void }> = ({ seasons, onSeasonChange }) => {
+const Seasons: React.FC<{ seasons: Season[]; onSeasonChange: (season: number | null) => void }> = ({ seasons, onSeasonChange }) => {
   const [selectedSeason, setSelectedSeason] = useState<number | null>(null);
 
   const handleSeasonChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -61,10 +78,10 @@ const Seasons: React.FC<{ seasons: any[]; onSeasonChange: (season: number | null
   );
 };
 
-const Modal: React.FC<ModalProps> = ({ podcast, closeModal }) => {
-  const [seasons, setSeasons] = useState<any[]>([]);
+const Modal: React.FC<ModalProps> = ({ podcast, closeModal, toggleFavoriteEpisode, episodeFavorites }) => {
+  const [seasons, setSeasons] = useState<Season[]>([]);
   const [selectedSeason, setSelectedSeason] = useState<number | null>(null);
-  const [episodes, setEpisodes] = useState<any[]>([]);
+  const [episodes, setEpisodes] = useState<Episode[]>([]);
 
   useEffect(() => {
     const fetchSeasons = async () => {
@@ -117,17 +134,23 @@ const Modal: React.FC<ModalProps> = ({ podcast, closeModal }) => {
           <div className="episodes">
             <h3>Episodes:</h3>
             <ul>
-              {episodes.map((episode) => (
-                <li key={episode.episodeNumber}>
-                  <p><strong>{episode.title}</strong> - Episode {episode.episodeNumber}</p>
-                  <div className="audio-player">
-                    <audio controls>
-                      <source src={episode.audioUrl || "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"} type="audio/mp3" />
-                      Your browser does not support the audio element.
-                    </audio>
-                  </div>
-                </li>
-              ))}
+              {episodes.map((episode) => {
+                const uniqueId = `${selectedSeason}-${episode.episodeNumber}`;
+                return (
+                  <li key={uniqueId} className="episode-item">
+                    <p><strong>{episode.title}</strong> - Episode {episode.episodeNumber}</p>
+                    <button onClick={() => toggleFavoriteEpisode(uniqueId)}>
+                      {episodeFavorites.includes(uniqueId) ? "Remove from Favorites" : "Add to Favorites"}
+                    </button>
+                    <div className="audio-player">
+                      <audio controls>
+                        <source src={episode.audioUrl || "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"} type="audio/mp3" />
+                        Your browser does not support the audio element.
+                      </audio>
+                    </div>
+                  </li>
+                );
+              })}
             </ul>
           </div>
         ) : (

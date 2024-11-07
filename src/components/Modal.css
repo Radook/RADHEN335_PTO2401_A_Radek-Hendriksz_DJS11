@@ -1,4 +1,53 @@
-body{
-  color: red;
-  color: aqua;
+/* Styles for the season dropdown */
+.season-dropdown {
+  margin-bottom: 15px;
+  border: 1px solid #444; /* Darker border for dark theme */
+  border-radius: 8px; /* More rounded corners */
+  padding: 10px; /* Add padding for better spacing */
+  background-color: #333; /* Dark background for better contrast */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5); /* Subtle shadow for depth */
+}
+
+.season-dropdown label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #ffffff; /* White color for better readability on dark background */
+}
+
+.season-dropdown select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #555; /* Darker border for select */
+  border-radius: 4px;
+  font-size: 16px;
+  background-color: #444; /* Dark background for the dropdown */
+  color: #ffffff; /* White text for better readability */
+  transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Added transition for box-shadow */
+}
+
+.season-dropdown select:hover {
+  border-color: #007bff; /* Change border color on hover */
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.2); /* Add shadow on hover */
+}
+
+.season-dropdown select:focus {
+  outline: none; /* Remove default outline */
+  border-color: #007bff; /* Change border color on focus */
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Add shadow for focus effect */
+}
+
+/* Styles for the episode items */
+.episode-item {
+  border: 1px solid #555; /* Darker border for episode items */
+  border-radius: 4px; /* Rounded corners */
+  padding: 10px; /* Padding for spacing */
+  margin-bottom: 10px; /* Space between episodes */
+  background-color: #444; /* Dark background for episode items */
+  color: #ffffff; /* White text for better readability */
+  transition: box-shadow 0.3s ease; /* Transition for shadow effect */
+}
+
+.episode-item:hover {
+  box-shadow: 0 0 10px rgba(0, 123, 255, 0.5); /* Shadow effect on hover */
 }

@@ -22,6 +22,7 @@ const ShowList: React.FC = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [selectedPodcast, setSelectedPodcast] = useState<Podcast | null>(null);
   const [favorites, setFavorites] = useState<number[]>([]);
+  const [episodeFavorites, setEpisodeFavorites] = useState<string[]>([]);
 
   const podcastsPerPage = 6;
 
@@ -51,6 +52,14 @@ const ShowList: React.FC = () => {
 
     localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
     setFavorites(updatedFavorites);
+  };
+
+  const toggleFavoriteEpisode = (uniqueId: string) => {
+    const updatedEpisodeFavorites = episodeFavorites.includes(uniqueId)
+      ? episodeFavorites.filter((id) => id !== uniqueId)
+      : [...episodeFavorites, uniqueId];
+
+    setEpisodeFavorites(updatedEpisodeFavorites);
   };
 
   const filteredPodcasts = podcasts
@@ -151,7 +160,14 @@ const ShowList: React.FC = () => {
       </div>
 
       {/* Conditionally render the Modal */}
-      {selectedPodcast && <Modal podcast={selectedPodcast} closeModal={closeModal} />}
+      {selectedPodcast && (
+        <Modal 
+          podcast={selectedPodcast} 
+          closeModal={closeModal} 
+          toggleFavoriteEpisode={toggleFavoriteEpisode} 
+          episodeFavorites={episodeFavorites}
+        />
+      )}
 
     </div>
   );
