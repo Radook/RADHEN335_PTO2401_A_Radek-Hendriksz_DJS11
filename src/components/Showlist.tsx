@@ -59,7 +59,8 @@ const ShowList: React.FC = () => {
       ? episodeFavorites.filter((id) => id !== uniqueId)
       : [...episodeFavorites, uniqueId];
 
-    setEpisodeFavorites(updatedEpisodeFavorites);
+    setEpisodeFavorites(updatedEpisodeFavorites); // Update the episodeFavorites state
+    localStorage.setItem("episodeFavorites", JSON.stringify(updatedEpisodeFavorites)); // Save to localStorage
   };
 
   const filteredPodcasts = podcasts
@@ -164,7 +165,7 @@ const ShowList: React.FC = () => {
         <Modal 
           podcast={selectedPodcast} 
           closeModal={closeModal} 
-          toggleFavoriteEpisode={toggleFavoriteEpisode} 
+          toggleFavoriteEpisode={toggleFavoriteEpisode}
           episodeFavorites={episodeFavorites}
         />
       )}
