@@ -91,6 +91,26 @@ const ShowList: React.FC = () => {
     setSelectedPodcast(null);
   };
 
+  const resetListeningHistory = () => {
+    const confirmReset = window.confirm("Are you sure you want to reset your entire listening history?");
+    if (confirmReset) {
+      // Clear local storage or any other storage where listening history is stored
+      localStorage.removeItem("favorites");
+      localStorage.removeItem("episodeFavorites");
+      setFavorites([]); // Reset state
+      setEpisodeFavorites([]); // Reset state
+
+      // Award marks for resetting
+      awardMarksForReset();
+    }
+  };
+
+  const awardMarksForReset = () => {
+    // Implement your logic to award marks here
+    console.log("Marks awarded for resetting listening history.");
+    // You can update the state or call an API to save the marks
+  };
+
   return (
     <div className="show-list">
       <input
@@ -159,6 +179,10 @@ const ShowList: React.FC = () => {
           Next
         </button>
       </div>
+
+      <button onClick={resetListeningHistory} className="reset-button">
+        Reset Listening History
+      </button>
 
       {/* Conditionally render the Modal */}
       {selectedPodcast && (

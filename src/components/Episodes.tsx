@@ -1,5 +1,6 @@
 import React from "react";
 import { FaStar, FaRegStar } from 'react-icons/fa'; // Star icons
+import './Episodes.css';
 
 interface Episode {
   season: number;
@@ -23,7 +24,7 @@ const Episodes: React.FC<EpisodesProps> = ({ episodes, episodeFavorites, toggleF
       <h3>Episodes:</h3>
       <ul>
         {episodes.map((episode) => {
-          const uniqueId = `${episode.season}-${episode.episodeNumber}`;
+          const uniqueId = `${episode.season}-${episode.episodeNumber}`; // Unique ID for each episode
 
           return (
             <li key={uniqueId} className="episode-item">
