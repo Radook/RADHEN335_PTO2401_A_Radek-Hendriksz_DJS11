@@ -44,10 +44,14 @@ const ShowList: React.FC = () => {
     fetchPodcasts();
   }, [currentPage]);
 
-  useEffect(() => {
-    const savedFavorites = JSON.parse(localStorage.getItem("favorites") || "[]");
-    setFavorites(savedFavorites);
-  }, []);
+  const toggleFavoritePodcast = (podcastId: number) => {
+    const updatedFavorites = favorites.includes(podcastId)
+      ? favorites.filter((id) => id !== podcastId)
+      : [...favorites, podcastId];
+
+    localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
+    setFavorites(updatedFavorites);
+  };
 
   const filteredPodcasts = podcasts
     .filter((podcast) =>
@@ -75,15 +79,6 @@ const ShowList: React.FC = () => {
 
   const closeModal = () => {
     setSelectedPodcast(null);
-  };
-
-  const toggleFavorite = (podcastId: number) => {
-    const updatedFavorites = favorites.includes(podcastId)
-      ? favorites.filter((id) => id !== podcastId)
-      : [...favorites, podcastId];
-
-    localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
-    setFavorites(updatedFavorites);
   };
 
   return (
@@ -135,7 +130,7 @@ const ShowList: React.FC = () => {
               <img src={podcast.image} alt={podcast.title} />
               <h3>{podcast.title}</h3>
               <p>{podcast.description.slice(0, 100)}...</p>
-              <button onClick={(e) => { e.stopPropagation(); toggleFavorite(podcast.id); }}>
+              <button onClick={(e) => { e.stopPropagation(); toggleFavoritePodcast(podcast.id); }}>
                 {favorites.includes(podcast.id) ? "Remove from Favorites" : "Add to Favorites"}
               </button>
             </div>
@@ -157,6 +152,7 @@ const ShowList: React.FC = () => {
 
       {/* Conditionally render the Modal */}
       {selectedPodcast && <Modal podcast={selectedPodcast} closeModal={closeModal} />}
+
     </div>
   );
 };

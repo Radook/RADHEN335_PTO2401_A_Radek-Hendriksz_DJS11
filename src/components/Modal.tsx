@@ -38,9 +38,8 @@ const Seasons: React.FC<{ seasons: any[]; onSeasonChange: (season: number | null
     onSeasonChange(season); // Notify parent component of the selected season
   };
 
-  // If seasons is not an array, render a fallback message
   if (!Array.isArray(seasons) || seasons.length === 0) {
-    return <div>No seasons available</div>; // Updated message for no seasons
+    return <div>No seasons available</div>;
   }
 
   return (
@@ -52,7 +51,7 @@ const Seasons: React.FC<{ seasons: any[]; onSeasonChange: (season: number | null
         onChange={handleSeasonChange}
       >
         <option value="">All Seasons</option>
-        {seasons.map((season, index) => (
+        {seasons.map((season) => (
           <option key={season.season} value={season.season}>
             {season.title ? `Season ${season.season}: ${season.title}` : `Season ${season.season}`}
           </option>
@@ -63,23 +62,19 @@ const Seasons: React.FC<{ seasons: any[]; onSeasonChange: (season: number | null
 };
 
 const Modal: React.FC<ModalProps> = ({ podcast, closeModal }) => {
-  const [seasons, setSeasons] = useState<any[]>([]); // State to store seasons
+  const [seasons, setSeasons] = useState<any[]>([]);
   const [selectedSeason, setSelectedSeason] = useState<number | null>(null);
-  const [episodes, setEpisodes] = useState<any[]>([]); // State to store episodes of selected season
+  const [episodes, setEpisodes] = useState<any[]>([]);
 
-  // Fetch seasons based on podcast id
   useEffect(() => {
     const fetchSeasons = async () => {
       try {
         const response = await fetch(`https://podcast-api.netlify.app/id/${podcast.id}`);
         const data = await response.json();
-        console.log("API Response:", data);
-
-        // Assuming the API returns a seasons array of objects with `season` field
-        const fetchedSeasons = data.seasons || []; // Ensure seasons is an array
-        setSeasons(fetchedSeasons); // Set seasons state
+        const fetchedSeasons = data.seasons || [];
+        setSeasons(fetchedSeasons);
         if (fetchedSeasons.length > 0) {
-          setSelectedSeason(fetchedSeasons[0].season); // Set the first season as selected (optional)
+          setSelectedSeason(fetchedSeasons[0].season);
         }
       } catch (error) {
         console.error("Error fetching seasons:", error);
@@ -87,23 +82,19 @@ const Modal: React.FC<ModalProps> = ({ podcast, closeModal }) => {
     };
 
     if (podcast.id) {
-      fetchSeasons(); // Fetch the seasons if podcast.id is available
+      fetchSeasons();
     }
-  }, [podcast.id]); // Fetch seasons when the podcast id changes
+  }, [podcast.id]);
 
-  // Handler for season change, to be passed to the Seasons component
   const handleSeasonChange = (season: number | null) => {
     setSelectedSeason(season);
-    console.log("Selected season:", season);
-
     if (season !== null) {
-      // Find the episodes for the selected season
       const selectedSeasonData = seasons.find((s) => s.season === season);
       if (selectedSeasonData && selectedSeasonData.episodes) {
-        setEpisodes(selectedSeasonData.episodes); // Update the episodes state with the selected season's episodes
+        setEpisodes(selectedSeasonData.episodes);
       }
     } else {
-      setEpisodes([]); // Clear episodes if no season is selected
+      setEpisodes([]);
     }
   };
 
@@ -114,26 +105,21 @@ const Modal: React.FC<ModalProps> = ({ podcast, closeModal }) => {
         <h2>{podcast.title}</h2>
         <img src={podcast.image} alt={podcast.title} />
 
-        {/* Seasons Dropdown with fetched seasons */}
         <Seasons seasons={seasons} onSeasonChange={handleSeasonChange} />
 
-        {/* Display genre names */}
         <p className="modal-genre">
           Genres: {podcast.genres.map((genreId) => GENRE_TITLES[genreId]).join(", ")}
         </p>
 
         <h2>{podcast.description}</h2>
 
-        {/* Display Episodes for the selected season */}
         {episodes.length > 0 ? (
           <div className="episodes">
             <h3>Episodes:</h3>
             <ul>
-              {episodes.map((episode, index) => (
-                <li key={index}>
+              {episodes.map((episode) => (
+                <li key={episode.episodeNumber}>
                   <p><strong>{episode.title}</strong> - Episode {episode.episodeNumber}</p>
-                  
-                  {/* Re-Added Audio Player */}
                   <div className="audio-player">
                     <audio controls>
                       <source src={episode.audioUrl || "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"} type="audio/mp3" />
