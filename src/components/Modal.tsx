@@ -31,6 +31,7 @@ interface ModalProps {
   closeModal: () => void;
   toggleFavoriteEpisode: (uniqueId: string) => void;
   episodeFavorites: string[];
+  setEpisodeFavorites: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
 // Define the Episode interface
@@ -49,7 +50,7 @@ interface Season {
   episodes: Episode[];
 }
 
-const Modal: React.FC<ModalProps> = ({ podcast, closeModal, toggleFavoriteEpisode, episodeFavorites }) => {
+const Modal: React.FC<ModalProps> = ({ podcast, closeModal, toggleFavoriteEpisode, episodeFavorites, setEpisodeFavorites }) => {
   const [seasons, setSeasons] = useState<Season[]>([]);
   const [selectedSeason, setSelectedSeason] = useState<number | null>(null);
   const [episodes, setEpisodes] = useState<Episode[]>([]);
@@ -92,6 +93,7 @@ const Modal: React.FC<ModalProps> = ({ podcast, closeModal, toggleFavoriteEpisod
         <button className="close-button" onClick={closeModal}>✖</button>
         <h2>{podcast.title}</h2>
         <img src={podcast.image} alt={podcast.title} />
+
         <p className="modal-genre">
           Genres: {podcast.genres.map((genreId) => GENRE_TITLES[genreId]).join(", ")}
         </p>
@@ -104,6 +106,7 @@ const Modal: React.FC<ModalProps> = ({ podcast, closeModal, toggleFavoriteEpisod
           episodes={episodes} 
           episodeFavorites={episodeFavorites} 
           toggleFavoriteEpisode={toggleFavoriteEpisode} 
+          setEpisodeFavorites={setEpisodeFavorites}
         />
       </div>
     </div>

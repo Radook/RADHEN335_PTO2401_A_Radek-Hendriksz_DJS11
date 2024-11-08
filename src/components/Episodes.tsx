@@ -1,5 +1,5 @@
 import React from "react";
-import { FaStar, FaRegStar } from 'react-icons/fa'; // Star icons
+import { FaStar, FaRegStar } from 'react-icons/fa';
 import './Episodes.css';
 
 interface Episode {
@@ -13,15 +13,28 @@ interface EpisodesProps {
   episodes: Episode[];
   episodeFavorites: string[];
   toggleFavoriteEpisode: (uniqueId: string) => void;
+  setEpisodeFavorites: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
-const Episodes: React.FC<EpisodesProps> = ({ episodes, episodeFavorites, toggleFavoriteEpisode }) => {
+const Episodes: React.FC<EpisodesProps> = ({ episodes, episodeFavorites, toggleFavoriteEpisode, setEpisodeFavorites }) => {
   
   const isFavorite = (uniqueId: string) => episodeFavorites.includes(uniqueId);
+
+  // New function to clear all favorite episodes
+  const clearFavoriteEpisodes = () => {
+    const confirmClear = window.confirm("Are you sure you want to clear all favorite episodes?");
+    if (confirmClear) {
+      setEpisodeFavorites([]); // Clear the state
+      localStorage.removeItem("episodeFavorites"); // Clear from localStorage
+    }
+  };
 
   return (
     <div className="episodes">
       <h3>Episodes:</h3>
+      <button onClick={clearFavoriteEpisodes} className="clear-favorites-button">
+        Clear All Favorite Episodes
+      </button>
       <ul>
         {episodes.map((episode) => {
           const uniqueId = `${episode.season}-${episode.episodeNumber}`; // Unique ID for each episode

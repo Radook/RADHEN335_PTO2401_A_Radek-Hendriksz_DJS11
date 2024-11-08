@@ -104,3 +104,19 @@
 .modal-genre {
   font-weight: bold;
 }
+
+.clear-favorites-button {
+  background-color: #ff4d4d; /* Red background for visibility */
+  color: white; /* White text color */
+  border: none; /* No border */
+  border-radius: 5px; /* Rounded corners */
+  padding: 10px 15px; /* Padding for better size */
+  cursor: pointer; /* Pointer cursor on hover */
+  font-size: 16px; /* Font size */
+  margin-bottom: 15px; /* Space below the button */
+  transition: background-color 0.3s; /* Smooth transition for hover effect */
+}
+
+.clear-favorites-button:hover {
+  background-color: #ff1a1a; /* Darker red on hover */
+}

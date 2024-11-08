@@ -207,6 +207,7 @@ const ShowList: React.FC = () => {
           closeModal={closeModal} 
           toggleFavoriteEpisode={toggleFavoriteEpisode}
           episodeFavorites={episodeFavorites}
+          setEpisodeFavorites={setEpisodeFavorites}
         />
       )}
     </div>
