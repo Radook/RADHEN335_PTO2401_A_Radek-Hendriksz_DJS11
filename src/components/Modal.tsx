@@ -92,16 +92,13 @@ const Modal: React.FC<ModalProps> = ({ podcast, closeModal, toggleFavoriteEpisod
         <button className="close-button" onClick={closeModal}>✖</button>
         <h2>{podcast.title}</h2>
         <img src={podcast.image} alt={podcast.title} />
-
-
         <p className="modal-genre">
           Genres: {podcast.genres.map((genreId) => GENRE_TITLES[genreId]).join(", ")}
         </p>
 
-        <h2>{podcast.description}</h2>
+        <h3>{podcast.description}</h3>
+        <h3>Selected Season: {selectedSeason !== null ? `Season ${selectedSeason}` : "None"}</h3>
         <Seasons seasons={seasons} onSeasonChange={handleSeasonChange} />
-
-        <h3>Selected Season: {selectedSeason !== null ? selectedSeason : "None"}</h3>
 
         <Episodes 
           episodes={episodes} 

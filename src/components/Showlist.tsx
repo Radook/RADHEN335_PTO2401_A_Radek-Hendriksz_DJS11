@@ -18,6 +18,7 @@ const ShowList: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [sortOption, setSortOption] = useState<"A-Z" | "Z-A" | "Newest" | "Oldest">("A-Z");
   const [selectedGenre, setSelectedGenre] = useState<number | null>(null);
+  const [selectedFavoritesFilter, setSelectedFavoritesFilter] = useState<boolean>(false);  // New state for filtering favorites
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [selectedPodcast, setSelectedPodcast] = useState<Podcast | null>(null);
@@ -31,6 +32,8 @@ const ShowList: React.FC = () => {
       try {
         const res = await fetch(`https://podcast-api.netlify.app/?page=${currentPage}&limit=${podcastsPerPage}`);
         const data = await res.json();
+        const savedEpisodeFavorites = JSON.parse(localStorage.getItem("episodeFavorites") || "[]");
+        setEpisodeFavorites(savedEpisodeFavorites);
         if (Array.isArray(data)) {
           setPodcasts(data);
           setTotalPages(Math.ceil(data.length / podcastsPerPage));
@@ -63,10 +66,12 @@ const ShowList: React.FC = () => {
     localStorage.setItem("episodeFavorites", JSON.stringify(updatedEpisodeFavorites)); // Save to localStorage
   };
 
+  // Apply favorite filter if selected
   const filteredPodcasts = podcasts
     .filter((podcast) =>
       podcast.title.toLowerCase().includes(searchQuery.toLowerCase()) &&
-      (selectedGenre === null || podcast.genres.includes(selectedGenre))
+      (selectedGenre === null || podcast.genres.includes(selectedGenre)) &&
+      (!selectedFavoritesFilter || favorites.includes(podcast.id))  // Only include if favorites filter is on
     )
     .sort((a, b) => {
       switch (sortOption) {
@@ -106,9 +111,8 @@ const ShowList: React.FC = () => {
   };
 
   const awardMarksForReset = () => {
-    // Implement your logic to award marks here
     console.log("Marks awarded for resetting listening history.");
-    // You can update the state or call an API to save the marks
+    // Additional functionality here, like updating state or calling an API endpoint.
   };
 
   return (
@@ -149,6 +153,15 @@ const ShowList: React.FC = () => {
         </select>
       </div>
 
+      {/* Favorites Filter */}
+      <div className="genre-filter">
+        <label>Show Favorites Only:</label>
+        <select value={selectedFavoritesFilter ? "Favorites" : "All"} onChange={(e) => setSelectedFavoritesFilter(e.target.value === "Favorites")}>
+          <option value="All">All Podcasts</option>
+          <option value="Favorites">Favorites Only</option>
+        </select>
+      </div>
+
       <div className="show-items">
         {filteredPodcasts.length > 0 ? (
           filteredPodcasts.map((podcast) => (
@@ -160,6 +173,9 @@ const ShowList: React.FC = () => {
               <img src={podcast.image} alt={podcast.title} />
               <h3>{podcast.title}</h3>
               <p>{podcast.description.slice(0, 100)}...</p>
+              <p>Seasons: {podcast.seasons}</p>
+              <p>Genres: {podcast.genres}</p>
+              <p>Last Updated: {podcast.updated}</p>
               <button onClick={(e) => { e.stopPropagation(); toggleFavoritePodcast(podcast.id); }}>
                 {favorites.includes(podcast.id) ? "Remove from Favorites" : "Add to Favorites"}
               </button>
@@ -193,7 +209,6 @@ const ShowList: React.FC = () => {
           episodeFavorites={episodeFavorites}
         />
       )}
-
     </div>
   );
 };
