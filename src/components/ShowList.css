@@ -11,7 +11,7 @@
 }
 
 .search-bar {
-  width: 100%;
+  width: 90%;
   padding: 12px;
   border: 1px solid #555;
   border-radius: 5px;
@@ -19,6 +19,7 @@
   color: #ffffff;
   margin-bottom: 20px;
   transition: border-color 0.3s ease;
+  text-align: center;
 }
 
 .search-bar:focus {
@@ -90,6 +91,9 @@
   padding: 15px;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .show-item:hover {
@@ -127,30 +131,26 @@
   background-color: #0056b3;
 }
 
-/* Pagination */
-.pagination {
+/* Layout Adjustments for Seasons and Date */
+.show-item .meta-info {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 20px;
+  justify-content: space-between;
+  font-size: 12px;
+  color: #999;
+  margin-top: 10px;
 }
 
-.pagination button {
-  padding: 10px 15px;
-  border: none;
-  background-color: #007bff;
-  color: white;
-  font-size: 16px;
-  border-radius: 4px;
-  cursor: pointer;
+.show-item .meta-info .seasons,
+.show-item .meta-info .date {
+  flex: 1;
 }
 
-.pagination button[disabled] {
-  background-color: #ccc;
+.show-item .meta-info .seasons {
+  text-align: left;
 }
 
-.pagination span {
-  font-size: 16px;
+.show-item .meta-info .date {
+  text-align: right;
 }
 
 /* Modal Overlay and Content */
@@ -278,5 +278,15 @@
     flex-direction: column;
     align-items: flex-start;
   }
-}
 
+  .show-item .meta-info {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .show-item .meta-info .seasons,
+  .show-item .meta-info .date {
+    flex: none;
+    margin-top: 5px;
+  }
+}

@@ -14,9 +14,11 @@ interface EpisodesProps {
   episodeFavorites: string[];
   toggleFavoriteEpisode: (uniqueId: string) => void;
   setEpisodeFavorites: React.Dispatch<React.SetStateAction<string[]>>;
+  onAudioPlay: () => void; // Callback to handle audio play
+  onAudioPause: () => void; // Callback to handle audio pause
 }
 
-const Episodes: React.FC<EpisodesProps> = ({ episodes, episodeFavorites, toggleFavoriteEpisode, setEpisodeFavorites }) => {
+const Episodes: React.FC<EpisodesProps> = ({ episodes, episodeFavorites, toggleFavoriteEpisode, setEpisodeFavorites, onAudioPlay, onAudioPause }) => {
   
   const isFavorite = (uniqueId: string) => episodeFavorites.includes(uniqueId);
 
@@ -41,7 +43,7 @@ const Episodes: React.FC<EpisodesProps> = ({ episodes, episodeFavorites, toggleF
 
           return (
             <li key={uniqueId} className="episode-item">
-              <p><strong>{episode.title}</strong> - Episode {episode.episodeNumber}</p>
+              <p><strong>{episode.title}</strong>{episode.episodeNumber}</p>
               <button onClick={() => {
                 console.log(`Toggling favorite for: ${uniqueId}`); // Debugging statement
                 toggleFavoriteEpisode(uniqueId);
@@ -53,7 +55,11 @@ const Episodes: React.FC<EpisodesProps> = ({ episodes, episodeFavorites, toggleF
                 )}
               </button>
               <div className="audio-player">
-                <audio controls>
+                <audio 
+                  controls
+                  onPlay={onAudioPlay}  // Trigger on audio play
+                  onPause={onAudioPause} // Trigger on audio pause
+                >
                   <source src={episode.audioUrl || "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"} type="audio/mp3" />
                   Your browser does not support the audio element.
                 </audio>

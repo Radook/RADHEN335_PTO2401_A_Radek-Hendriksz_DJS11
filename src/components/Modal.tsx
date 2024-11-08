@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import './modal.css'; // Importing the CSS file
-import Seasons from './Seasons'; // Import the Seasons component
-import Episodes from './Episodes'; // Import the Episodes component
+import './modal.css';
+import Seasons from './Seasons';
+import Episodes from './Episodes';
 
 const GENRE_TITLES: { [key: number]: string } = {
   1: "Personal Growth",
@@ -34,7 +34,6 @@ interface ModalProps {
   setEpisodeFavorites: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
-// Define the Episode interface
 interface Episode {
   id: number;
   duration: number;
@@ -44,7 +43,6 @@ interface Episode {
   audioUrl?: string;
 }
 
-// Define the Season interface
 interface Season {
   season: number;
   episodes: Episode[];
@@ -54,6 +52,7 @@ const Modal: React.FC<ModalProps> = ({ podcast, closeModal, toggleFavoriteEpisod
   const [seasons, setSeasons] = useState<Season[]>([]);
   const [selectedSeason, setSelectedSeason] = useState<number | null>(null);
   const [episodes, setEpisodes] = useState<Episode[]>([]);
+  const [isAudioPlaying, setIsAudioPlaying] = useState(false);
 
   useEffect(() => {
     const fetchSeasons = async () => {
@@ -75,6 +74,21 @@ const Modal: React.FC<ModalProps> = ({ podcast, closeModal, toggleFavoriteEpisod
     }
   }, [podcast.id]);
 
+  useEffect(() => {
+    // Add event listener for beforeunload
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      if (isAudioPlaying) {
+        e.preventDefault();
+        e.returnValue = "Audio is still playing. Are you sure you want to leave?";
+      }
+    };
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [isAudioPlaying]);
+
   const handleSeasonChange = (season: number | null) => {
     setSelectedSeason(season);
     if (season !== null) {
@@ -86,6 +100,9 @@ const Modal: React.FC<ModalProps> = ({ podcast, closeModal, toggleFavoriteEpisod
       setEpisodes([]);
     }
   };
+
+  const handleAudioPlay = () => setIsAudioPlaying(true);
+  const handleAudioPause = () => setIsAudioPlaying(false);
 
   return (
     <div className="modal-overlay" onClick={closeModal}>
@@ -107,6 +124,8 @@ const Modal: React.FC<ModalProps> = ({ podcast, closeModal, toggleFavoriteEpisod
           episodeFavorites={episodeFavorites} 
           toggleFavoriteEpisode={toggleFavoriteEpisode} 
           setEpisodeFavorites={setEpisodeFavorites}
+          onAudioPlay={handleAudioPlay} 
+          onAudioPause={handleAudioPause}
         />
       </div>
     </div>
