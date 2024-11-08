@@ -160,7 +160,7 @@ const ShowList: React.FC = () => {
       </div>
 
       <button onClick={resetListeningHistory} className="reset-button">
-        Reset Listening History
+        Reset Favourites
       </button>
 
       <div className="show-items">
