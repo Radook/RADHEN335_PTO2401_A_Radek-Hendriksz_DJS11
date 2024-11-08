@@ -19,8 +19,6 @@ const ShowList: React.FC = () => {
   const [sortOption, setSortOption] = useState<"A-Z" | "Z-A" | "Newest" | "Oldest">("A-Z");
   const [selectedGenre, setSelectedGenre] = useState<number | null>(null);
   const [selectedFavoritesFilter, setSelectedFavoritesFilter] = useState<boolean>(false);  // New state for filtering favorites
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
   const [selectedPodcast, setSelectedPodcast] = useState<Podcast | null>(null);
   const [favorites, setFavorites] = useState<number[]>([]);
   const [episodeFavorites, setEpisodeFavorites] = useState<string[]>([]);
@@ -30,13 +28,12 @@ const ShowList: React.FC = () => {
   useEffect(() => {
     const fetchPodcasts = async () => {
       try {
-        const res = await fetch(`https://podcast-api.netlify.app/?page=${currentPage}&limit=${podcastsPerPage}`);
+        const res = await fetch(`https://podcast-api.netlify.app/?page=&limit=${podcastsPerPage}`);
         const data = await res.json();
         const savedEpisodeFavorites = JSON.parse(localStorage.getItem("episodeFavorites") || "[]");
         setEpisodeFavorites(savedEpisodeFavorites);
         if (Array.isArray(data)) {
           setPodcasts(data);
-          setTotalPages(Math.ceil(data.length / podcastsPerPage));
         } else {
           console.error("Invalid data format");
         }
@@ -46,7 +43,7 @@ const ShowList: React.FC = () => {
     };
 
     fetchPodcasts();
-  }, [currentPage]);
+  }, );
 
   const toggleFavoritePodcast = (podcastId: number) => {
     const updatedFavorites = favorites.includes(podcastId)
@@ -106,14 +103,14 @@ const ShowList: React.FC = () => {
       setEpisodeFavorites([]); // Reset state
 
       // Award marks for resetting
-      awardMarksForReset();
+      // awardMarksForReset();
     }
   };
 
-  const awardMarksForReset = () => {
-    console.log("Marks awarded for resetting listening history.");
-    // Additional functionality here, like updating state or calling an API endpoint.
-  };
+  // const awardMarksForReset = () => {
+  //   console.log("Marks awarded for resetting listening history.");
+  //   // Additional functionality here, like updating state or calling an API endpoint.
+  // };
 
   return (
     <div className="show-list">
@@ -162,6 +159,10 @@ const ShowList: React.FC = () => {
         </select>
       </div>
 
+      <button onClick={resetListeningHistory} className="reset-button">
+        Reset Listening History
+      </button>
+
       <div className="show-items">
         {filteredPodcasts.length > 0 ? (
           filteredPodcasts.map((podcast) => (
@@ -174,8 +175,8 @@ const ShowList: React.FC = () => {
               <h3>{podcast.title}</h3>
               <p>{podcast.description.slice(0, 100)}...</p>
               <p>Seasons: {podcast.seasons}</p>
-              <p>Genres: {podcast.genres}</p>
-              <p>Last Updated: {podcast.updated}</p>
+              <p>Last Updated: {new Date(podcast.updated).toLocaleDateString()}</p>
+
               <button onClick={(e) => { e.stopPropagation(); toggleFavoritePodcast(podcast.id); }}>
                 {favorites.includes(podcast.id) ? "Remove from Favorites" : "Add to Favorites"}
               </button>
@@ -186,19 +187,6 @@ const ShowList: React.FC = () => {
         )}
       </div>
 
-      <div className="pagination">
-        <button onClick={() => setCurrentPage(Math.max(currentPage - 1, 1))} disabled={currentPage === 1}>
-          Previous
-        </button>
-        <span>Page {currentPage} of {totalPages}</span>
-        <button onClick={() => setCurrentPage(Math.min(currentPage + 1, totalPages))} disabled={currentPage === totalPages}>
-          Next
-        </button>
-      </div>
-
-      <button onClick={resetListeningHistory} className="reset-button">
-        Reset Listening History
-      </button>
 
       {/* Conditionally render the Modal */}
       {selectedPodcast && (

@@ -37,12 +37,15 @@ const Episodes: React.FC<EpisodesProps> = ({ episodes, episodeFavorites, toggleF
       </button>
       <ul>
         {episodes.map((episode) => {
-          const uniqueId = `${episode.season}-${episode.episodeNumber}`; // Unique ID for each episode
+          const uniqueId = `${episode.season}-${episode.episodeNumber}`; // Construct unique ID
 
           return (
             <li key={uniqueId} className="episode-item">
               <p><strong>{episode.title}</strong> - Episode {episode.episodeNumber}</p>
-              <button onClick={() => toggleFavoriteEpisode(uniqueId)}>
+              <button onClick={() => {
+                console.log(`Toggling favorite for: ${uniqueId}`); // Debugging statement
+                toggleFavoriteEpisode(uniqueId);
+              }}>
                 {isFavorite(uniqueId) ? (
                   <FaStar color="gold" />
                 ) : (
