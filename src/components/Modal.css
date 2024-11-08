@@ -115,6 +115,7 @@
   font-size: 16px; /* Font size */
   margin-bottom: 15px; /* Space below the button */
   transition: background-color 0.3s; /* Smooth transition for hover effect */
+  margin-bottom: 2rem;
 }
 
 .clear-favorites-button:hover {
