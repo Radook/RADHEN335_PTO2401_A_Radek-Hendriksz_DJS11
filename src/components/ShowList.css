@@ -33,25 +33,6 @@
   align-items: center;
 }
 
-.sort-options label {
-  font-weight: bold;
-  margin-right: 10px;
-  color: #ffffff;
-}
-
-.sort-options select {
-  padding: 10px;
-  border: 1px solid #555;
-  border-radius: 5px;
-  background-color: #333;
-  color: #ffffff;
-  transition: border-color 0.3s ease;
-}
-
-.sort-options select:hover {
-  border-color: #007bff;
-}
-
 .genre-filter {
   margin-bottom: 20px;
   display: flex;
