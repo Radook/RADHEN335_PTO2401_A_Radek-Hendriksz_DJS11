@@ -48,7 +48,7 @@ const Episodes: React.FC<EpisodesProps> = ({ episodes, episodeFavorites, toggleF
 
           return (
             <li key={uniqueId} className="episode-item">
-              <p><strong>{episode.title}</strong> - Episode {episodeNumber}</p>
+              <p><strong>{episode.title}</strong></p>
               <button onClick={() => {
                 console.log(`Toggling favorite for: ${uniqueId}`); // Debugging statement
                 toggleFavoriteEpisode(uniqueId);
