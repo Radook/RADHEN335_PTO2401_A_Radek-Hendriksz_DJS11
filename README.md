@@ -6,6 +6,7 @@
 
 This is a web application built using Vite, React, and TypeScript. It allows users to browse and play podcasts from various genres. 
 
+
 ### Key Features:
 - Browse podcasts by genre
 - Search for specific episodes
@@ -28,3 +29,8 @@ npm install
 Run the app locally: After installing dependencies, start the development server:
 
 npm run dev
+
+#Contact Info:
+Email: radekhendriksz@gmail.com
+LinkedIn: https://www.linkedin.com/in/radek-hendriksz-88b257241/
+
