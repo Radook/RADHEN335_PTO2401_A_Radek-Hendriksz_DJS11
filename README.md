@@ -30,7 +30,9 @@ Run the app locally: After installing dependencies, start the development server
 
 npm run dev
 
-#Contact Info:
+# Contact Info:
+
 Email: radekhendriksz@gmail.com
+
 LinkedIn: https://www.linkedin.com/in/radek-hendriksz-88b257241/
 
