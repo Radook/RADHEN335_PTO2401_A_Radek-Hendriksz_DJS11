@@ -108,7 +108,7 @@ const Modal: React.FC<ModalProps> = ({ podcast, closeModal, toggleFavoriteEpisod
     <div className="modal-overlay" onClick={closeModal}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <button className="close-button" onClick={closeModal}>✖</button>
-        <h2>{podcast.title}</h2>
+        {/* <h2>{podcast.title}</h2> */}
         <img src={podcast.image} alt={podcast.title} />
 
         <p className="modal-genre">
@@ -116,7 +116,7 @@ const Modal: React.FC<ModalProps> = ({ podcast, closeModal, toggleFavoriteEpisod
         </p>
 
         <h3>{podcast.description}</h3>
-        <h3>Selected Season: {selectedSeason !== null ? `Season ${selectedSeason}` : "None"}</h3>
+        {/* <h3>Selected Season: {selectedSeason !== null ? `Season ${selectedSeason}` : "None"}</h3> */}
         <Seasons seasons={seasons} onSeasonChange={handleSeasonChange} />
 
         <Episodes 

@@ -38,10 +38,10 @@ const Seasons: React.FC<SeasonsProps> = ({ seasons, onSeasonChange }) => {
         value={selectedSeason || ""}
         onChange={handleSeasonChange}
       >
-        <option value="">All Seasons</option>
+        <option value="">No Season Selected</option>
         {seasons.map((season) => (
           <option key={season.season} value={season.season}>
-            {season.title ? `Season ${season.season}: ${season.title}` : `Season ${season.season}`}
+            {season.title ? `Season ${season.season} ` : `Season ${season.season}`}
           </option>
         ))}
       </select>

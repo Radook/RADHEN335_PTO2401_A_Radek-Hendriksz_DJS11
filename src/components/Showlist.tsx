@@ -18,7 +18,7 @@ const ShowList: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [sortOption, setSortOption] = useState<"A-Z" | "Z-A" | "Newest" | "Oldest">("A-Z");
   const [selectedGenre, setSelectedGenre] = useState<number | null>(null);
-  const [selectedFavoritesFilter, setSelectedFavoritesFilter] = useState<boolean>(false);  // New state for filtering favorites
+  const [selectedFavoritesFilter, setSelectedFavoritesFilter] = useState<boolean>(false);  
   const [selectedPodcast, setSelectedPodcast] = useState<Podcast | null>(null);
   const [favorites, setFavorites] = useState<number[]>([]);
   const [episodeFavorites, setEpisodeFavorites] = useState<string[]>([]);
@@ -102,15 +102,9 @@ const ShowList: React.FC = () => {
       setFavorites([]); // Reset state
       setEpisodeFavorites([]); // Reset state
 
-      // Award marks for resetting
-      // awardMarksForReset();
     }
   };
 
-  // const awardMarksForReset = () => {
-  //   console.log("Marks awarded for resetting listening history.");
-  //   // Additional functionality here, like updating state or calling an API endpoint.
-  // };
 
   return (
     <div className="show-list">

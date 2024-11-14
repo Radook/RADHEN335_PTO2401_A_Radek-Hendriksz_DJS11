@@ -60,7 +60,7 @@ const Episodes: React.FC<EpisodesProps> = ({ episodes, episodeFavorites, toggleF
                   onPlay={onAudioPlay}  // Trigger on audio play
                   onPause={onAudioPause} // Trigger on audio pause
                 >
-                  <source src={episode.audioUrl || "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"} type="audio/mp3" />
+                  <source src={episode.audioUrl || "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3"} type="audio/mp3" />
                   Your browser does not support the audio element.
                 </audio>
               </div>
