@@ -50,7 +50,6 @@ interface Season {
 
 const Modal: React.FC<ModalProps> = ({ podcast, closeModal, toggleFavoriteEpisode, episodeFavorites, setEpisodeFavorites }) => {
   const [seasons, setSeasons] = useState<Season[]>([]);
-  const [selectedSeason, setSelectedSeason] = useState<number | null>(null);
   const [episodes, setEpisodes] = useState<Episode[]>([]);
   const [isAudioPlaying, setIsAudioPlaying] = useState(false);
 
@@ -62,7 +61,8 @@ const Modal: React.FC<ModalProps> = ({ podcast, closeModal, toggleFavoriteEpisod
         const fetchedSeasons = data.seasons || [];
         setSeasons(fetchedSeasons);
         if (fetchedSeasons.length > 0) {
-          setSelectedSeason(fetchedSeasons[0].season);
+          // Automatically set episodes from the first season if it exists
+          setEpisodes(fetchedSeasons[0].episodes || []);
         }
       } catch (error) {
         console.error("Error fetching seasons:", error);
@@ -90,7 +90,6 @@ const Modal: React.FC<ModalProps> = ({ podcast, closeModal, toggleFavoriteEpisod
   }, [isAudioPlaying]);
 
   const handleSeasonChange = (season: number | null) => {
-    setSelectedSeason(season);
     if (season !== null) {
       const selectedSeasonData = seasons.find((s) => s.season === season);
       if (selectedSeasonData && selectedSeasonData.episodes) {
@@ -108,7 +107,7 @@ const Modal: React.FC<ModalProps> = ({ podcast, closeModal, toggleFavoriteEpisod
     <div className="modal-overlay" onClick={closeModal}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <button className="close-button" onClick={closeModal}>✖</button>
-        {/* <h2>{podcast.title}</h2> */}
+
         <img src={podcast.image} alt={podcast.title} />
 
         <p className="modal-genre">
@@ -116,7 +115,6 @@ const Modal: React.FC<ModalProps> = ({ podcast, closeModal, toggleFavoriteEpisod
         </p>
 
         <h3>{podcast.description}</h3>
-        {/* <h3>Selected Season: {selectedSeason !== null ? `Season ${selectedSeason}` : "None"}</h3> */}
         <Seasons seasons={seasons} onSeasonChange={handleSeasonChange} />
 
         <Episodes 

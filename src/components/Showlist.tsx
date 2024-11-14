@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./ShowList.css";
-import Modal from './Modal';
+import Modal from "./Modal";
 
 interface Podcast {
   id: number;
@@ -18,7 +18,7 @@ const ShowList: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [sortOption, setSortOption] = useState<"A-Z" | "Z-A" | "Newest" | "Oldest">("A-Z");
   const [selectedGenre, setSelectedGenre] = useState<number | null>(null);
-  const [selectedFavoritesFilter, setSelectedFavoritesFilter] = useState<boolean>(false);  
+  const [selectedFavoritesFilter, setSelectedFavoritesFilter] = useState<boolean>(false);
   const [selectedPodcast, setSelectedPodcast] = useState<Podcast | null>(null);
   const [favorites, setFavorites] = useState<number[]>([]);
   const [episodeFavorites, setEpisodeFavorites] = useState<string[]>([]);
@@ -43,7 +43,7 @@ const ShowList: React.FC = () => {
     };
 
     fetchPodcasts();
-  }, );
+  }, []);
 
   const toggleFavoritePodcast = (podcastId: number) => {
     const updatedFavorites = favorites.includes(podcastId)
@@ -59,16 +59,15 @@ const ShowList: React.FC = () => {
       ? episodeFavorites.filter((id) => id !== uniqueId)
       : [...episodeFavorites, uniqueId];
 
-    setEpisodeFavorites(updatedEpisodeFavorites); // Update the episodeFavorites state
-    localStorage.setItem("episodeFavorites", JSON.stringify(updatedEpisodeFavorites)); // Save to localStorage
+    setEpisodeFavorites(updatedEpisodeFavorites);
+    localStorage.setItem("episodeFavorites", JSON.stringify(updatedEpisodeFavorites));
   };
 
-  // Apply favorite filter if selected
   const filteredPodcasts = podcasts
     .filter((podcast) =>
       podcast.title.toLowerCase().includes(searchQuery.toLowerCase()) &&
       (selectedGenre === null || podcast.genres.includes(selectedGenre)) &&
-      (!selectedFavoritesFilter || favorites.includes(podcast.id))  // Only include if favorites filter is on
+      (!selectedFavoritesFilter || favorites.includes(podcast.id))
     )
     .sort((a, b) => {
       switch (sortOption) {
@@ -96,15 +95,12 @@ const ShowList: React.FC = () => {
   const resetListeningHistory = () => {
     const confirmReset = window.confirm("Are you sure you want to reset your entire listening history?");
     if (confirmReset) {
-      // Clear local storage or any other storage where listening history is stored
       localStorage.removeItem("favorites");
       localStorage.removeItem("episodeFavorites");
-      setFavorites([]); // Reset state
-      setEpisodeFavorites([]); // Reset state
-
+      setFavorites([]);
+      setEpisodeFavorites([]);
     }
   };
-
 
   return (
     <div className="show-list">
@@ -116,7 +112,6 @@ const ShowList: React.FC = () => {
         className="search-bar"
       />
 
-      {/* Sort Options */}
       <div className="sort-options">
         <label>Sort by:</label>
         <select value={sortOption} onChange={(e) => setSortOption(e.target.value as typeof sortOption)}>
@@ -127,7 +122,6 @@ const ShowList: React.FC = () => {
         </select>
       </div>
 
-      {/* Genre Filter */}
       <div className="genre-filter">
         <label>Filter by Genre:</label>
         <select value={selectedGenre || ""} onChange={(e) => setSelectedGenre(Number(e.target.value) || null)}>
@@ -144,8 +138,7 @@ const ShowList: React.FC = () => {
         </select>
       </div>
 
-      {/* Favorites Filter */}
-      <div className="genre-filter">
+      <div className="favorites-filter">
         <label>Show Favorites Only:</label>
         <select value={selectedFavoritesFilter ? "Favorites" : "All"} onChange={(e) => setSelectedFavoritesFilter(e.target.value === "Favorites")}>
           <option value="All">All Podcasts</option>
@@ -154,17 +147,13 @@ const ShowList: React.FC = () => {
       </div>
 
       <button onClick={resetListeningHistory} className="reset-button">
-        Reset Favourites
+        Reset Favorites
       </button>
 
       <div className="show-items">
         {filteredPodcasts.length > 0 ? (
           filteredPodcasts.map((podcast) => (
-            <div
-              key={podcast.id}
-              className="show-item"
-              onClick={() => handlePodcastClick(podcast)}
-            >
+            <div key={podcast.id} className="show-item" onClick={() => handlePodcastClick(podcast)}>
               <img src={podcast.image} alt={podcast.title} />
               <h3>{podcast.title}</h3>
               <p>{podcast.description.slice(0, 100)}...</p>
@@ -181,15 +170,13 @@ const ShowList: React.FC = () => {
         )}
       </div>
 
-
-      {/* Conditionally render the Modal */}
       {selectedPodcast && (
-        <Modal 
-          podcast={selectedPodcast} 
-          closeModal={closeModal} 
+        <Modal
+          podcast={selectedPodcast}
+          closeModal={closeModal}
           toggleFavoriteEpisode={toggleFavoriteEpisode}
           episodeFavorites={episodeFavorites}
-          setEpisodeFavorites={setEpisodeFavorites}
+          setEpisodeFavorites={setEpisodeFavorites}  // Pass setEpisodeFavorites here
         />
       )}
     </div>

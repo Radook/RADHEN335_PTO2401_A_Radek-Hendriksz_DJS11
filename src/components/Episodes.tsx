@@ -19,7 +19,7 @@ interface EpisodesProps {
 }
 
 const Episodes: React.FC<EpisodesProps> = ({ episodes, episodeFavorites, toggleFavoriteEpisode, setEpisodeFavorites, onAudioPlay, onAudioPause }) => {
-  
+
   const isFavorite = (uniqueId: string) => episodeFavorites.includes(uniqueId);
 
   // New function to clear all favorite episodes
@@ -39,11 +39,16 @@ const Episodes: React.FC<EpisodesProps> = ({ episodes, episodeFavorites, toggleF
       </button>
       <ul>
         {episodes.map((episode) => {
-          const uniqueId = `${episode.season}-${episode.episodeNumber}`; // Construct unique ID
+          // Ensure season and episodeNumber are always defined, or fallback to a default value
+          const season = episode.season || 0;
+          const episodeNumber = episode.episodeNumber || 0;
+
+          // Include title in the unique ID to avoid collisions with season-episode duplicates
+          const uniqueId = `${season}-${episodeNumber}-${episode.title}`;
 
           return (
             <li key={uniqueId} className="episode-item">
-              <p><strong>{episode.title}</strong>{episode.episodeNumber}</p>
+              <p><strong>{episode.title}</strong> - Episode {episodeNumber}</p>
               <button onClick={() => {
                 console.log(`Toggling favorite for: ${uniqueId}`); // Debugging statement
                 toggleFavoriteEpisode(uniqueId);
